@@ -5,7 +5,8 @@
 using namespace std;
 
 struct Node {
-	string key = "";
+	//string key = "";
+	char* key = new char[1];
 	Node* ptr_to_prev_node = nullptr;
 	Node* ptr_to_next_node = nullptr;
 };
@@ -16,18 +17,14 @@ struct List {
 	int size = 0;
 };
 
-struct stringforfile {
-	string str;
-};
-
-void delete_key(List& list, string key) {
+void delete_key(List& list, char key) {
 	if (list.head_node == nullptr) {
 		cout << "List is empty" << endl;
 		return;
 	}
 
 	Node* remove_node = list.head_node;
-	while ((remove_node->key != key) && (remove_node != nullptr)) {
+	while ((*(remove_node->key) != key) && (remove_node != nullptr)) {
 		remove_node = remove_node->ptr_to_next_node;
 	}
 
@@ -58,9 +55,9 @@ void delete_key(List& list, string key) {
 
 }
 
-void add_node(List& list, int index, string str) {
+void add_node(List& list, int index, char str) {
 	Node* new_node = new Node;
-	new_node->key = str;
+	*(new_node->key) = str;
 
 	list.size++;
 
@@ -113,7 +110,7 @@ void print_list(List& list) {
 	}
 
 	while (current_node != nullptr) {
-		cout << current_node->key << "; ";
+		cout << *(current_node->key) << "; ";
 		current_node = current_node->ptr_to_next_node;
 	}
 	
@@ -136,14 +133,16 @@ void list_filesave(List& list) {
 }
 
 void list_fileread(List& list) {
+	char buffer_char[1];
 	string buffer_str;
 
 	ifstream f("list_savestate.dat");
 
 	while (!f.eof()) {
 		getline(f, buffer_str);
+		buffer_char[0] = buffer_str[0];
 		if (buffer_str != "") {
-			add_node(list, -1, buffer_str);
+			add_node(list, -1, buffer_str[0]);
 		}
 	}
 
@@ -163,6 +162,7 @@ void list_delete(List& list) {
 int main() {
 	int n, k;
 	string str;
+	char ch[1];
 	List list;
 	
 	cout << "Enter number of elements that will be entered on list creation: ";
@@ -172,14 +172,16 @@ int main() {
 	for (int i = 1; i <= n; ++i) {
 		cout << "Enter key for element: ";
 		getline(cin, str);
-		add_node(list, -1, str);
+		ch[0] = str[0];
+		add_node(list, -1, ch[0]);
 	}
 
 	print_list(list);
 
 	cout << "Enter key for deletion: ";
 	getline(cin, str);
-	delete_key(list, str);
+	ch[0] = str[0];
+	delete_key(list, ch[0]);
 	print_list(list);
 
 	cout << "Enter index of element for adding and number (K) of entering element: ";
@@ -189,7 +191,8 @@ int main() {
 	for (int i = 1; i <= k; ++i) {
 		cout << "Enter key for element: ";
 		getline(cin, str);
-		add_node(list, n, str);
+		ch[0] = str[0];
+		add_node(list, n, ch[0]);
 	}
 	print_list(list);
 
