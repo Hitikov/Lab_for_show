@@ -157,6 +157,8 @@ void list_delete(List& list) {
 		(list).head_node = (list).head_node->ptr_to_next_node;
 		delete remove_node;
 	}
+
+	list.size = 0;
 }
 
 int main() {
